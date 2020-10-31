@@ -8,7 +8,16 @@
 
 using namespace std;
 
-class Usuario {
+struct Message{
+    std::string content;
+    std::string sender;
+    std::string destination;
+    std::string getMessageContent(){
+      return "From: " + sender + ", To: " + destination + " -> " + content;
+    };
+};
+
+class Usuario{
 //Encapsuling data
 private:
     std::string userName;
@@ -95,6 +104,11 @@ void printUser(Usuario u){
 };
 
 int main(int argc, char* argv[]){
+    Message alert;
+    alert.sender = "John Rambo";
+    alert.destination = "Coronel Trautman";
+    alert.content = "I will kill ya.Soon";
+    std::cout << alert.getMessageContent() << endl;
     //Init new user with constructor one
     Usuario novo;
     //Init new userRef
