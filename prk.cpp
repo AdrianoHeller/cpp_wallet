@@ -15,9 +15,26 @@ struct Message{
     std::string getMessageContent(){
       return "From: " + sender + ", To: " + destination + " -> " + content;
     };
+    Message(std::string c,std::string s,std::string d):
+    content(c),sender(s),destination(d){
+        std::cout << " struct created" << std::endl;
+    };
+    ~Message(){
+        std::cout << "struct destructed" << std::endl;
+    };
 };
 
-class Usuario{
+Message* createNewMessageInHeap(std::string c,std::string s, std::string d){
+    return new Message(c,s,d);
+};
+
+void destructMessageInHeap(Message* m){
+  if(sizeof m > 0 && m != nullptr){
+    delete m;
+  };
+};
+
+class User{
 //Encapsuling data
 private:
     std::string userName;
@@ -41,19 +58,19 @@ public:
         this->wallet -= this->wallet > amount ? amount : 0 ;
     };
     //Standard Constructor
-    Usuario():Usuario("","",0.00){
+    User():User("","",0.00){
         std::cout << "new User" << " ";
     };
     //Composed Constructor
-    Usuario(std::string _username, std::string _userAddress, double _amount ){
+    User(std::string _username, std::string _userAddress, double _amount ){
         this->userName = _username;
         this->address = _userAddress;
         this->wallet = _amount;
     };
     //Copy Constructor
-    Usuario(Usuario& u){};
+    User(User& u){};
     //Class Destructor
-    ~Usuario(){ std::cout << "destructor" << "\n"; };
+    ~User(){ std::cout << "destructor" << "\n"; };
 
     void setUsername(std::string userData){
         this->userName = userData;
@@ -97,26 +114,42 @@ public:
     };
 };
 
+class Company{
+private:
+    std::string name;
+    std::string mktField;
+    double socialCapital;
+    bool receivedMoneyFee;
+    bool isStartup;
+public:
+    Company():name(""),mktField(""),socialCapital(0),receivedMoneyFee(0),isStartup(0){
+        cout << "new Company created" << endl;
+    };
+//    Company(std::string n,std::string mF,double sC, bool rMF, bool isS){};
+    ~Company(){ cout << "destructor" << endl;};
+};
+
 //this method creates a copy of the instance to the stack
-void printUser(Usuario u){
+void printUser(User u){
     u.setUsername("Chuck de Bruce");
     std::cout << u.getUserData() << std::endl;
 };
 
 int main(int argc, char* argv[]){
-    Message alert;
-    alert.sender = "John Rambo";
-    alert.destination = "Coronel Trautman";
-    alert.content = "I will kill ya.Soon";
-    std::cout << alert.getMessageContent() << endl;
+
+    Message* nova = createNewMessageInHeap("Warning Message.", "John", "Paul");
+    std::cout << nova->getMessageContent() << std::endl;
+    destructMessageInHeap(nova);
+
+    Company emp;
     //Init new user with constructor one
-    Usuario novo;
+    User novo;
     //Init new userRef
-    Usuario& novoRef = novo;
+    User& novoRef = novo;
     //Init new user with other constructor
-    Usuario dois {"Charles Bronson", "Blvd West 53rd", 150000};
+    User dois {"Charles Bronson", "Blvd West 53rd", 150000};
     novo.setUsername("Adriano Heller");
-    novo.setUserAddress("Rua Padre Anchieta 1968 ap.405");
+    novo.setUserAddress("Strawberry Fields rd 1805");
     //Checking memory addresses
     std::cout << &novo << " " << &novoRef << " " << std::endl;
     std::cout << novoRef.getUserData() << "\n";
